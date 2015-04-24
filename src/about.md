@@ -4,27 +4,16 @@ title: About
 ---
 
 <p class="message">
-  Hey there! This page is included as an example. Feel free to customize it for your own use upon downloading. Carry on!
+  I'm a Web Developer from Costa Rica with more than 5 years of experience in the World Wide Web. I've been working for startup and big companies, facing all kind of technologies and design challenges. 
 </p>
 
-In the novel, *The Strange Case of Dr. Jeykll and Mr. Hyde*, Mr. Poole is Dr. Jekyll's virtuous and loyal butler. Similarly, Poole is an upstanding and effective butler that helps you build Jekyll themes. It's made by [@mdo](https://twitter.com/mdo).
+*Communication* is essential, the approach with the clients is not just a transaction, is the key to deliver a great product and accomplish the desired result.
 
-There are currently two themes built on Poole:
+Useful links:
 
-* [Hyde](http://hyde.getpoole.com)
-* [Lanyon](http://lanyon.getpoole.com)
+* [EstebanGam](http://www.estebangam.com)
+* [Github](http://github.com/egamboa)
+* [Linkedin](https://www.linkedin.com/profile/view?id=244218367)
 
-Learn more and contribute on [GitHub](https://github.com/poole).
-
-## Setup
-
-Some fun facts about the setup of this project include:
-
-* Built for [Jekyll](http://jekyllrb.com)
-* Developed on GitHub and hosted for free on [GitHub Pages](https://pages.github.com)
-* Coded with [Sublime Text 2](http://sublimetext.com), an amazing code editor
-* Designed and developed while listening to music like [Blood Bros Trilogy](https://soundcloud.com/maddecent/sets/blood-bros-series)
-
-Have questions or suggestions? Feel free to [open an issue on GitHub](https://github.com/poole/issues/new) or [ask me on Twitter](https://twitter.com/mdo).
-
-Thanks for reading!
+##Andrés Esteban Gamboa Arrieta
+506-8821-1497 estebangam1@gmail.com San José, Costa Rica

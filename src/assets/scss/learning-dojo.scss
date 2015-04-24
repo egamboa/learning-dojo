@@ -1,0 +1,60 @@
+#helloworld{
+	
+}
+.hideIt{
+	opacity: 0;
+}
+.highlight-odd{
+	color: #f02541;
+	&:hover{
+		color: #f02541;
+		text-decoration: underline;	
+	}
+}
+
+.spaced-bottom{
+	margin-bottom: 15px;
+}
+.btn{
+	margin-right: 5px;
+}
+
+#topBottom{
+	border: 1px solid #777;
+	padding: 32px 30px;
+	width: 100px;
+	height: 100px;
+	position: fixed;
+	bottom: 2%;
+	right: 10%;
+	button{
+		background: none;
+		border: none;
+		padding: 0;
+		outline:0px !important;
+    	-webkit-appearance:none;
+	}
+	.glyphicon{
+		font-size: 35px;
+	}
+	.glyphicon-arrow-down{
+		display: block;
+	}
+	.glyphicon-arrow-up{
+		display: none;
+	}
+	&.down{
+		.glyphicon-arrow-down{ display:none }
+		.glyphicon-arrow-up{ display:block }
+	}
+}
+
+#container-swap{
+	position: relative;
+	height: 200px;
+	.contentBox{
+		position : absolute;
+		width: 400px;
+		min-height: 200px;
+	}
+}
