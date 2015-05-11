@@ -1,0 +1,179 @@
+---
+layout: post
+date: 2015-04-04
+title: Step 4 Animation
+categories: dojo tutorial
+---
+    <div class="row">
+      <div class="col-lg-12">
+        <h4>Getting Started | Effects Recap</h4>
+        <div class="well">
+          require(["dojo/fx", "dojo/dom", "dojo/domReady!"], function(fx, dom) {<br>
+              &emsp;fx.wipeIn({<br>
+                  &emsp;&emsp;node: dom.byId("wipeTarget")<br>
+              &emsp;}).play();<br>
+          });
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-12 spaced-bottom">
+        <h4>Animating Properties</h4>
+        <button id="startButton" class="btn">Grow Borders</button>
+        <button id="reverseButton" class="btn">Shrink Borders</button>
+      </div>
+      <div class="col-lg-12">
+        <div id="anim8target" class="box well" style="border-style:outset">
+            <div class="innerBox">A box</div>
+        </div>
+      </div>
+
+      <script type="text/javascript">
+        require(["dojo/on", "dojo/dom-style", "dojo/_base/fx", "dojo/topic", "dojo/dom-construct", "dojo/dom", "dojo/domReady!"],
+            function(on, domStyle, baseFx, topic, domConstruct, dom) {              
+              baseFx.animateProperty({
+                node: dom.byId("anim8target"),
+                properties: { borderWidth: 30 }
+              }).play();
+
+              var startButton = dom.byId("startButton"),
+                  reverseButton = dom.byId("reverseButton");
+              on(startButton, "click", function() {
+                  topic.publish("changeSize", 10);
+              });
+              on(reverseButton, "click", function() {
+                  topic.publish("changeSize", -10);
+              });
+              // Register the alerting routine with the "alertUser" topic.
+              topic.subscribe("changeSize", function(size){
+                  var animateDiv = dom.byId("anim8target"),
+                      borderWidth = domStyle.get(animateDiv, "border-width");
+                  if(borderWidth >= 0){
+                    if(size < 0){
+                      if(borderWidth > 0){
+                        domStyle.set(animateDiv, "borderWidth", (borderWidth + size)+"px");
+                      }
+                    }else if(size > 0){
+                      domStyle.set(animateDiv, "borderWidth", (borderWidth + size)+"px"); 
+                    }
+                  }
+              });
+            });
+      </script>
+    </div>
+
+    <div id="topBottom" class="down">
+      <button id="clickMe3">
+        <span class="glyphicon glyphicon-arrow-up"></span>
+        <span class="glyphicon glyphicon-arrow-down"></span>
+      </button>
+      <script type="text/javascript">
+        require([
+                "dojo/on", 
+                "dojo/window", 
+                "dojo/fx/easing", 
+                "dojo/dom-class", 
+                "dojo/dom-style", 
+                "dojo/_base/fx", 
+                "dojo/dom", 
+                "dojo/dom-construct",
+                "dojo/domReady!"],
+            function(on, win, easing, domClass, domStyle, baseFx, dom){
+              var toggleButton = dom.byId('clickMe3'),
+                  topBottom = dom.byId('topBottom'), bottomValue = 0;
+              on(toggleButton, "click", function() {
+                  var viewport = win.getBox(win.doc);
+                  if(domClass.contains(topBottom, "down")){
+                    bottomValue = 20;
+                  }else{
+                    bottomValue = viewport.h - topBottom.offsetHeight - 20;
+                  }
+                  domClass.toggle("topBottom", "down");
+                  baseFx.animateProperty({
+                      easing: easing.bounceOut,
+                      duration: 500,
+                      node: topBottom,
+                      properties: {
+                          top: { end: bottomValue }
+                      }
+                  }).play();
+              });
+            });
+      </script>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-12 spaced-bottom">
+        <h4>Putting it Together</h4>
+        <button id="swapButton" class="btn spaced-bottom">Swap</button>
+
+        <div class="container" id="container-swap">
+            <div id="content1" class="contentBox well" style="top: 0; left: 0">
+                <div class="innerBox">1: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmodSwap tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.</div>
+            </div>
+            <div id="content2" class="contentBox well" style="top: 0; left: 500px">
+                <div class="innerBox">2: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</div>
+            </div>
+        </div>
+        <script>
+
+          require(["dojo/_base/fx", "dojo/fx", "dojo/fx/easing", "dojo/dom-style", "dojo/dom", "dojo/on", "dojo/aspect", "dojo/domReady!"], function(baseFx, fx, easing, domStyle, dom, on, aspect) {
+
+              function swapAnim(node1, node2) {
+                  var posn1 = parseInt(domStyle.get(node1, "left")),
+                      posn2 = parseInt(domStyle.get(node2, "left"));
+
+                  return moveNodes = fx.combine([
+                      fx.slideTo({
+                          duration: 1200,
+                          node: node2,
+                          left: posn1
+                      }),
+                      fx.slideTo({
+                          duration: 1200,
+                          node: node1,
+                          left: posn2
+                      })
+                  ]);
+              }
+
+              var originalOrder = true; // track which order our content nodes are in
+
+                  var swapButton = dom.byId("swapButton"),
+                  c1 = originalOrder ? dom.byId("content1") : dom.byId("content2"),
+                  c2 = originalOrder ? dom.byId("content2") : dom.byId("content1"),
+                  container = dom.byId("container-swap");
+
+                  // Set up a click handlers to run our animations
+                  on(swapButton, "click", function(evt){
+
+                      // chain the swap nodes animation
+                      // with another to fade out a background color in our container
+                      var anim = fx.chain([
+                          swapAnim(c1, c2),
+                          baseFx.animateProperty({
+                              node: container,
+                              properties: {
+                                  backgroundColor: "#fff"
+                              }
+                          }),
+
+                      ]);
+                      // before the animation begins, set initial container background
+                      aspect.before(anim, "beforeBegin", function(){
+                          domStyle.set(container, "backgroundColor", "#fff");
+                      });
+
+                      // when the animation ends, toggle the originalOrder
+                      on(anim, "End", function(n1, n2){
+                          originalOrder = !originalOrder;
+                      });
+
+                      anim.play();
+                  });
+          });
+          </script>
+      </div>
+    </div>
+      

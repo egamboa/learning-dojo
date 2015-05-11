@@ -1,0 +1,101 @@
+---
+layout: post
+date: 2015-05-07
+title: Step 4 Ajax with dojo/request
+categories: dojo tutorial
+---
+
+	<div class="row">
+        <div class="col-lg-12">
+          <h4>Getting Started | AJAX</h4>
+          <div class="well">
+          	<p>
+          		<mark>dojo/request</mark> allows you to send and receive data to and from the server without reloading the page (commonly known as AJAX). The new features introduced make written code more compact and the execution lightning fast. This tutorial mentions dojo/promise and dojo/Deferred, which dojo/request uses for asynchronous programming. Because it's impossible to learn everything at once, just keep in mind that promises and Deferreds allow for easier programming of non-blocking asynchronous code. After this tutorial, you'll want to check out those tutorials.
+          	</p>
+          </div>
+        </div>
+        <div class="col-lg-12">
+	        <h5>First Example</h5>
+	        <p>loading an TEXT file with content from local server:</p>
+	        <div class="well well-sm hideIt" id="the_content"></div>
+	        <script type="text/javascript">
+	        	require(["dojo/request", 
+	        			 "dojo/dom",
+	        			 'dojo/_base/fx',
+	        			 "/assets/javascript/miModulo.js"], 
+	        	function (request, dom, fx, miModulo){
+				    request("/assets/myrifle.txt").then(
+				        function(text){
+				        	miModulo.setText('the_content', text);
+				        	var ajaxText = dom.byId('the_content');
+				            fx.fadeIn({
+				              node: ajaxText,
+				              duration: 2000
+				            }).play();
+				            console.log("The file's content is: " + text);
+				        },
+				        function(error){
+				            console.log("An error occurred: " + error);
+				        }
+				    );
+				});
+	        </script>
+	    </div>
+	    <div class="col-lg-12">
+	    	<h5>The dojo/request API</h5>
+	    	<p>Every request needs one thing: an end-point. Because of this, dojo/request's first parameter is the URL to request.</p>
+	    	<p>In this example I'm going to search for a wikipedia node and load the results on a UL list:</p>
+	    	<div class="col-lg-2">
+			  <div class="form-group">
+			    <input type="text" class="form-control" id="wikiSearch" placeholder="Wikipedia">
+			  </div>
+			  <button type="submit" id="searchButton" class="btn btn-default">Search</button>
+  			</div>
+			<div class="col-lg-12">
+				<span class="help-block">Results:</span>
+				<ul id="exampleResults">
+					<li class="" id="noResult">Nothing here!</li>
+				</ul>
+			</div>
+			<script type="text/javascript">
+	        	require(["dojo/query", "dojo/dom-class", "dojo/_base/array", "dojo/request/registry", "dojo/request/script", "dojo/dom",
+			        "dojo/dom-construct", "dojo/on", "dojo/dom-attr", "dojo/domReady!"],
+			    function (query, domClass, array, request, script, dom, domConstruct, on, domAttr){
+			        // Registers anything that starts with "http://"
+			        // to be sent to the script provider,
+			        // requests for a local search will use xhr
+			        request.register(/^https?:\/\//i, script);
+
+			        // When the search button is clicked
+			        on(dom.byId("searchButton"), "click", function(){
+			            // First send a request to twitter for all tweets
+			            // tagged with the search string
+
+			            request('http://en.wikipedia.org/w/api.php?action=opensearch&format=json&search=' + domAttr.get("wikiSearch", "value") +'&limit=10&format=json', {
+			            	headers: { 'Content-Type': 'application/javascript' },
+			            	jsonp: "callback",
+					        handleAs: "jsonp"
+			            }).then(function(data){
+			            	console.log("this is the results:"+data);
+			            	if(data[1].length != 0){
+			            		domClass.add("noResult", "hidden");
+			            		query(".result").forEach(domConstruct.destroy);
+			            		array.forEach(data[1], function(item, i){
+							      	var theLi = domConstruct.create("li", 
+							      		{class: "result",innerHTML: (i+1)+". "}, "exampleResults");
+
+			            			domConstruct.create("a", { target: '_blank', href: data[3][i], title: item, innerHTML: item }, theLi);
+			            			domConstruct.create("p", {innerHTML: data[2][i] }, theLi);
+							    });
+			            	}else{
+			            		domClass.remove("noResult", "hidden");
+			            		query(".result").forEach(domConstruct.destroy);
+			            		console.log('Tengo que borrar todos los li menos el primero y quitarle el hidden class para que muerte que no hay resultados');
+			            	}
+			            });
+			        });
+			    }
+			);
+	        </script>
+	    </div>
+      </div>

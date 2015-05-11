@@ -1,0 +1,69 @@
+---
+layout: post
+date: 2015-04-02
+title: Step 2 Using dojo/query
+categories: dojo tutorial
+---
+      <p>Getting Started | Queries | Restricting your query | More advanced selections | NodeList | Events</p>
+      <div class="row">
+        <div class="col-lg-6">
+          <p>#list</p>
+          <ul id="list">
+            <li class="odd-holder">
+              <a class="odd">Odd</a>
+            </li>
+            <li class="even-holder">
+              <a class="even">Even</a>
+            </li>
+            <li class="odd-holder">
+              <a class="odd">Odd</a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-lg-6">
+          <p>#list2</p>
+              <ul id="list2">
+                <li class="odd-holder"><a class="odd">Odd</a></li>
+              </ul>
+        </div>
+      </div>
+      <p>General | Odd: <span id="odds-length"></span> Even: <span id="evens-length"></span> </p>
+      <p>#List | Odd: <span id="list-odds-length"></span> Even: <span id="list-evens-length"></span> </p>
+      <script type="text/javascript">
+        // require the query, dom, and domReady modules
+        require([
+              "dojo/query", 
+              "dojo/dom-class", 
+              "dojo/dom", 
+              "dojo/domReady!"
+            ], function (query, domClass, dom) {
+            // retrieve an array of nodes with the ID "list"
+            var domOdds = dom.byId('odds-length'); 
+            var domEvens = dom.byId('evens-length');
+            var listDomOdds = dom.byId('list-odds-length'); 
+            var listDomEvens = dom.byId('list-evens-length');
+
+            var odds = query('.odd');
+            var evens = query('.even'); 
+
+            domOdds.innerHTML = odds.length;
+            domEvens.innerHTML = evens.length;
+
+            var odds2 = query(".odd", dom.byId("list"));
+            var evens2 = query(".even", dom.byId("list"));
+
+            listDomOdds.innerHTML = odds2.length;
+            listDomEvens.innerHTML = evens2.length;
+
+            query(".odd").forEach(function(node, index, nodelist){
+              // for each node in the array returned by query,
+              // execute the following code
+              domClass.add(node, "highlight-odd");
+          });
+
+          query(".odd").on("click", function(){
+              alert("You clicked a odd row!");
+          });
+
+        })
+      </script>

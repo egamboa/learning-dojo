@@ -2,21 +2,28 @@
 layout: default
 title: Home
 ---
+<script>
+  var dojoConfig = {
+    async: true,
+    packages: [
+        'dojo',
+        'dijit',
+        'dojox',
+        'demo'
+    ]
+  };
+</script>
 
 <div class="posts">
-  {% for post in paginator.posts %}
+  {% for post in paginator.posts reversed %}
   <div class="post">
-    <h1 class="post-title">
-      <a href="{{ post.url }}">
+    <h2 class="post-title">
         {{ post.title }}
-      </a>
-    </h1>
+    </h2>
 
     <span class="post-date">{{ post.date | date_to_string }}</span>
 
-    {{ post.excerpt }}
-
-    <a href="{{ post.url }}">Read more &raquo;</a>
+    {{ post.content }}
   </div>
   {% endfor %}
 </div>

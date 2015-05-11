@@ -1,0 +1,35 @@
+---
+layout: post
+date: 2015-04-01
+title: Step 1 Helloworld
+categories: dojo tutorial
+---
+<p class="lead"><a href="http://dojotoolkit.org/documentation/tutorials/1.10/hello_dojo/index.html">Step 1: <span id="helloworld" class="hideIt">Hello World</span></a></p>
+      <p>Getting Started | Defining AMD Modules | Waiting for the DOM | Adding Visual Effects</p>
+      <p>My Module: <span id="hi-module" class="hideIt"></span> </p>
+      <script>
+        require([
+            'dojo/dom',
+            'dojo/_base/fx',
+            "dojo/on",
+            'dojo/dom-style',
+            '/assets/javascript/miModulo.js',
+            'dojo/domReady!'
+        ], function (dom, fx, on, style, miModulo) {
+
+            miModulo.setText('hi-module', 'Hello from my custom module!');
+            miModulo.setText('helloworld', 'Hello from Dojo!');
+
+            var greeting = dom.byId('helloworld');
+            fx.fadeIn({
+              node: greeting,
+              duration: 2000
+            }).play();
+
+            var hiModule = dom.byId('hi-module');  
+            fx.fadeIn({
+              node: hiModule,
+              duration: 2000
+            }).play();
+        });
+    </script>

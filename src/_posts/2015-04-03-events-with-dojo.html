@@ -1,0 +1,139 @@
+---
+layout: post
+date: 2015-04-03
+title: Step 3 Events with Dojo
+categories: dojo tutorial
+---
+      <div class="row">
+        <div class="col-lg-12">
+          <h4>Getting Started | DOM Events</h4>
+        </div>
+        <div class="spaced-bottom">
+          <div class="col-lg-3">
+            <button id="myButton" class="btn">Click me!</button>
+          </div>
+          <div class="col-lg-3">
+            <div id="myDiv" class="btn">Hover over me!</div>
+          </div>
+        </div>
+        <script type="text/javascript">
+        require([
+              "dojo/on", 
+              "dojo/dom", 
+              "dojo/dom-style", 
+              "dojo/mouse", 
+              "dojo/domReady!"
+            ],function (on, dom, domStyle, mouse) {
+                var myButton = dom.byId("myButton"),
+                    myDiv = dom.byId("myDiv");
+
+                on(myButton, "click", function(evt){
+                    domStyle.set(myDiv, "backgroundColor", "blue");
+                });
+                on(myDiv, mouse.enter, function(evt){
+                    domStyle.set(myDiv, "backgroundColor", "red");
+                });
+                on(myDiv, mouse.leave, function(evt){
+                    domStyle.set(myDiv, "backgroundColor", "");
+              });
+        });
+        </script>
+      </div>
+      <div class="row spaced-bottom">
+        <div class="col-lg-12">
+          <h4>NodeList events</h4>
+          <button id="button1" class="btn clickMe">Click me</button>
+          <button id="button2" class="btn clickMeAlso">Click me also</button>
+          <button id="button3" class="btn clickMe">Click me too</button>
+          <button id="button4" class="btn clickMeAlso">Please click me</button>
+          <script>
+          require(["dojo/query", "dojo/_base/lang", "dojo/domReady!"],
+              function(query, lang) {
+
+                  var myObject = {
+                      id: "myObject",
+                      onClick: function(evt){
+                          alert("The scope of this handler is " + this.id);
+                      }
+                  };
+                  query(".clickMe").on("click", myObject.onClick);
+                  query(".clickMeAlso").on("click", lang.hitch(myObject, "onClick"));
+
+          });
+          </script>
+        </div>
+      </div>
+
+      <div class="row spaced-bottom">
+        <div class="col-lg-12">
+          <h4>Event Delegation</h4>
+            <div id="parentDiv">
+                <button id="button1" class="btn clickMe2">Click me</button>
+                <button id="button2" class="btn clickMe2">Click me also</button>
+                <button id="button3" class="btn clickMe2">Click me too</button>
+                <button id="button4" class="btn clickMe2">Please click me</button>
+            </div>
+            <script>
+            require(["dojo/on", "dojo/dom", "dojo/query", "dojo/domReady!"],
+                function(on, dom){
+
+                    var myObject = {
+                        id: "myObject",
+                        onClick: function(evt){
+                          console.log(this);
+                            alert("The scope of this handler is " + this.id);
+                        }
+                    };
+                    var div = dom.byId("parentDiv");
+                    on(div, ".clickMe2:click", myObject.onClick);
+
+            });
+            </script>
+        </div>
+      </div>
+
+      <div class="row spaced-bottom">
+        <div class="col-lg-12">
+          <h4>Publish/Subscribe</h4>
+            <button id="alertButton" class="btn">Alert the user</button>
+            <button id="createAlert" class="btn">Create another alert button</button>
+
+            <script>
+            require(["dojo/on", "dojo/topic", "dojo/dom-construct", "dojo/dom", "dojo/domReady!"],
+                function(on, topic, domConstruct, dom) {
+
+                    var alertButton = dom.byId("alertButton"),
+                        createAlert = dom.byId("createAlert");
+
+                    on(alertButton, "click", function() {
+                        // When this button is clicked,
+                        // publish to the "alertUser" topic
+                        topic.publish("alertUser", "I am alerting you.");
+                    });
+
+                    on(createAlert, "click", function(evt){
+                        // Create another button
+                        var anotherButton = domConstruct.create("button", {
+                            innerHTML: "Another alert button",
+                            class: "btn"
+                        }, createAlert, "after");
+
+                        // When the other button is clicked,
+                        // publish to the "alertUser" topic
+                        on(anotherButton, "click", function(evt){
+                            topic.publish("alertUser", "I am also alerting you.");
+                        });
+                    });
+
+                    // Register the alerting routine with the "alertUser" topic.
+                    topic.subscribe("alertUser", function(text){
+                        alert(text);
+                    });
+
+            });
+            </script>
+        </div>
+      </div>
+
+
+
