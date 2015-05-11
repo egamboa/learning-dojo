@@ -954,7 +954,9 @@ a.pagination-item:hover {
   height: 100px;
   position: fixed;
   bottom: 2%;
-  right: 10%; }
+  right: 10%;
+  z-index: 100;
+  background-color: #fff; }
   #topBottom button {
     background: none;
     border: none;
