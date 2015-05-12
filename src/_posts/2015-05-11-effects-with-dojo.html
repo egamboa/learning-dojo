@@ -1,0 +1,291 @@
+---
+layout: post
+date: 2015-05-11
+title: Step 5 Effects
+categories: dojo tutorial
+---
+<div class="row">
+	<div class="col-lg-12">
+		<h5>Fading</h5>
+		<p>One animation you might have seen in applications you have used is a node fading in or out.</p>
+	</div>
+</div>
+<div class="row">
+	<div class="col-lg-3">
+		<div class="form-group">
+			<button id="fadeOutButton" class="form-control">Fade block out</button>
+		</div>
+		<div class="form-group">
+			<button id="fadeInButton" class="form-control">Fade block in</button>
+		</div>	
+	</div>
+</div>
+<div class="row">
+	<div id="fadeTarget" class="red-block alert alert-danger col-lg-4">
+		A red block
+	</div>
+</div>
+
+<script>
+	require(["dojo/_base/fx", "dojo/on", "dojo/dom", "dojo/domReady!"], function(fx, on, dom) {
+	    var fadeOutButton = dom.byId("fadeOutButton"),
+	        fadeInButton = dom.byId("fadeInButton"),
+	        fadeTarget = dom.byId("fadeTarget");
+
+	    on(fadeOutButton, "click", function(evt){
+	        fx.fadeOut({ node: fadeTarget }).play();
+	    });
+	    on(fadeInButton, "click", function(evt){
+	        fx.fadeIn({ node: fadeTarget }).play();
+	    });
+	});
+</script>
+
+<div class="row">
+	<div class="col-lg-12">
+		<h5>Wiping</h5>
+		<p>Another effect you might have seen is wiping: changing the height of a node while leaving the content alone.</p>
+	</div>
+</div>
+<div class="row">
+	<div class="col-lg-3">
+		<div class="form-group">
+			<button id="wipeOutButton" class="form-control">Wipe block out</button>
+		</div>
+		<div class="form-group">
+			<button id="wipeInButton" class="form-control">Wipe block in</button>
+		</div>	
+	</div>
+</div>
+<div class="row">
+	<div id="wipeTarget" class="red-block alert alert-danger col-lg-4">
+		A red block
+	</div>
+</div>
+<script>
+    require(["dojo/fx", "dojo/on", "dojo/dom", "dojo/domReady!"], function(fx, on, dom) {
+        var wipeOutButton = dom.byId("wipeOutButton"),
+            wipeInButton = dom.byId("wipeInButton"),
+            wipeTarget = dom.byId("wipeTarget");
+
+        on(wipeOutButton, "click", function(evt){
+            fx.wipeOut({ node: wipeTarget }).play();
+        });
+        on(wipeInButton, "click", function(evt){
+            fx.wipeIn({ node: wipeTarget }).play();
+        });
+    });
+</script>
+
+<div class="row">
+	<div class="col-lg-12">
+		<h5>Sliding</h5>
+		<p>So far we've covered hiding nodes, but what if we're looking to move them around a bit? A fade or a wipe doesn't change the node's location.</p>
+	</div>
+</div>
+<div class="row">
+	<div class="col-lg-3">
+		<div class="form-group">
+			<button id="slideAwayButton" class="form-control">Slide block out</button>
+		</div>
+		<div class="form-group">
+			<button id="slideBackButton" class="form-control">Slide block in</button>
+		</div>	
+	</div>
+</div>
+<div class="row">
+	<div id="slideTarget" class="red-block alert alert-danger col-lg-4">
+		A red block
+	</div>
+</div>
+<script>
+    require(["dojo/fx", "dojo/on", "dojo/dom", "dojo/domReady!"], function(fx, on, dom) {
+        var slideAwayButton = dom.byId("slideAwayButton"),
+            slideBackButton = dom.byId("slideBackButton"),
+            slideTarget = dom.byId("slideTarget");
+
+        on(slideAwayButton, "click", function(evt){
+            fx.slideTo({ node: slideTarget, left: "300", top: "0" }).play();
+        });
+        on(slideBackButton, "click", function(evt){
+            fx.slideTo({ node: slideTarget, left: "0", top: "0" }).play();
+        });
+    });
+</script>
+
+<div class="row">
+	<div class="col-lg-12">
+		<h5>Animation Events</h5>
+		<p>As discussed previously, all of these animation methods return a dojo/_base/fx::Animation object.</p>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-3">
+		<div class="form-group">
+			<button id="slideAwayButton2" class="form-control">Slide block out</button>
+		</div>
+		<div class="form-group">
+			<button id="slideBackButton2" class="form-control">Slide block in</button>
+		</div>	
+	</div>
+</div>
+<div class="row">
+	<div id="slideTarget2" class="red-block alert alert-danger col-lg-4">
+		A red block
+	</div>
+</div>
+<script>
+    require(["dojo/fx", "dojo/on", "dojo/dom-style", "dojo/dom", "dojo/domReady!"], function(fx, on, style, dom) {
+
+        var slideAwayButton = dom.byId("slideAwayButton2"),
+            slideBackButton = dom.byId("slideBackButton2"),
+            slideTarget = dom.byId("slideTarget2");
+
+            on(slideAwayButton, "click", function(evt){
+                // Note that we're specifying the beforeBegin as a property of the animation
+                // rather than using connect. This ensures that our beforeBegin handler
+                // executes before any others.
+                var anim = fx.slideTo({
+                    node: slideTarget,
+                    left: "500",
+                    top: "0",
+                    beforeBegin: function(){
+
+                        console.warn("slide target is: ", slideTarget);
+
+                        style.set(slideTarget, {
+                            left: "0px",
+                            top: "0px"
+                        });
+                    }
+                });
+
+                // We could have also specified onEnd above alongside beforeBegin,
+                // but it's just as easy to connect like so
+                on(anim, "End", function(){
+                    style.set(slideTarget, {
+                        color: "blue"
+                    });
+                }, true);
+
+                // Don't forget to actually start the animation!
+                anim.play();
+            });
+
+            on(slideBackButton, "click", function(evt){
+                var anim = fx.slideTo({
+                    node: slideTarget,
+                    left: "0",
+                    top: "0",
+                    beforeBegin: function(){
+
+                        style.set(slideTarget, {
+                            left: "500px",
+                            top: "0px"
+                        });
+                    }
+                });
+
+                on(anim, "End", function(){
+                    style.set(slideTarget, {
+                        color: "red"
+                    });
+                }, true);
+
+                anim.play();
+            });
+    });
+</script>
+
+<div class="row">
+	<div class="col-lg-12">
+		<h5>Chaining</h5>
+		<p>What if we want to fire animations in sequence? We could use the End event that we just talked about to set up the next effect, but that's not very convenient.</p>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-3">
+		<div class="form-group">
+			<button id="slideAwayButton3" class="form-control">Slide block out</button>
+		</div>
+		<div class="form-group">
+			<button id="slideBackButton3" class="form-control">Slide block in</button>
+		</div>	
+	</div>
+</div>
+<div class="row">
+	<div id="slideTarget3" class="red-block alert alert-danger col-lg-4">
+		A red block
+	</div>
+</div>
+
+<script>
+    require(["dojo/_base/fx", "dojo/fx", "dojo/on", "dojo/dom", "dojo/domReady!"], function(baseFx, fx, on, dom) {
+
+        var slideAwayButton = dom.byId("slideAwayButton3"),
+            slideBackButton = dom.byId("slideBackButton3"),
+            slideTarget = dom.byId("slideTarget3");
+
+        // Set up a couple of click handlers to run our chained animations
+        on(slideAwayButton, "click", function(evt){
+            fx.chain([
+                fx.slideTo({ node: slideTarget, left: "200", top: "0" }),
+                baseFx.fadeOut({ node: slideTarget })
+            ]).play();
+        });
+        on(slideBackButton, "click", function(evt){
+            fx.chain([
+                baseFx.fadeIn({ node: slideTarget }),
+                fx.slideTo({ node: slideTarget, left: "0", top: "0" })
+            ]).play();
+        });
+    });
+</script>
+
+<div class="row">
+	<div class="col-lg-12">
+		<h5>Combining</h5>
+		<p>The second convenience method that dojo/fx provides is the combine method which will start multiple animations at the same time.</p>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-3">
+		<div class="form-group">
+			<button id="slideAwayButton4" class="form-control">Slide block out</button>
+		</div>
+		<div class="form-group">
+			<button id="slideBackButton4" class="form-control">Slide block in</button>
+		</div>	
+	</div>
+</div>
+<div class="row">
+	<div id="slideTarget4" class="red-block alert alert-danger col-lg-4">
+		A red block
+	</div>
+</div>
+
+<script>
+    require(["dojo/_base/fx", "dojo/fx", "dojo/on", "dojo/dom", "dojo/domReady!"], function(baseFx, fx, on, dom) {
+
+        var slideAwayButton = dom.byId("slideAwayButton4"),
+            slideBackButton = dom.byId("slideBackButton4"),
+            slideTarget = dom.byId("slideTarget4");
+
+        // Set up a couple of click handlers to run our combined animations
+        on(slideAwayButton, "click", function(evt){
+            fx.combine([
+                baseFx.fadeOut({ node: slideTarget }),
+                fx.slideTo({ node: slideTarget, left: "200", top: "0" })
+            ]).play();
+        });
+        on(slideBackButton, "click", function(evt){
+            fx.combine([
+                fx.slideTo({ node: slideTarget, left: "0", top: "0" }),
+                baseFx.fadeIn({ node: slideTarget })
+            ]).play();
+        });
+    });
+</script>

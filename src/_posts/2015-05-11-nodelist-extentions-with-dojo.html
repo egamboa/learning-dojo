@@ -1,0 +1,105 @@
+---
+layout: post
+date: 2015-05-11
+title: Step 6 NodeList Extensions
+categories: dojo tutorial
+---
+
+<div class="row">
+	<div class="col-lg-12">
+		<p>Dojo includes a range of extensions to the NodeList collection that is used by dojo/query. In this tutorial, we’ll look at what extended functionality is available and how to put it to good use.</p>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-12">
+		<h4>Getting Started</h4>
+		<p>In the earlier tutorial on dojo/query, we saw how to get a collection of nodes matching a query or selector, and how to use the methods on dojo/NodeList to work with those nodes. Let's quickly recap. Here's the markup we’ll be using for most of the demos (we're going with a fruity theme for this tutorial):</p>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-12">
+		<button type="button" id="btn">Pick out fresh fruits</button>
+
+		<h5>Fresh Fruits</h5>
+		<ul id="freshList"></ul>
+
+		<h5>Fruits</h5>
+		<ul>
+		    <li class="fresh">Apples</li>
+		    <li class="fresh">Persimmons</li>
+		    <li class="fresh">Grapes</li>
+		    <li class="fresh">Fresh Figs</li>
+		    <li class="dried">Dates</li>
+		    <li class="dried">Raisins</li>
+		    <li class="dried">Prunes</li>
+		    <li class="fresh dried">Apricots</li>
+		    <li class="fresh">Peaches</li>
+		    <li class="fresh">Bananas</li>
+		    <li class="fresh">Cherries</li>
+		</ul>
+	</div>
+</div>
+<script type="text/javascript">
+require(["dojo/query", "dojo/NodeList-dom", "dojo/domReady!"], function(query){
+    query("#btn").on("click", function(){
+        query("li.fresh")
+	        .addClass("fresher")
+	        .attr("title", "freshened")
+	        .style("background", "lightblue")
+	        .on("click", function(){
+	            alert("I love fresh " + this.innerHTML);
+        	});
+    });
+});
+</script>
+
+<div class="row">
+	<div class="col-lg-12">
+		<h4>Doing More with NodeList</h4>
+		<p>This pattern of getting some nodes and doing something with them is pervasive enough that many potential features of NodeList end up conflicting with the modular nature of Dojo and a focus on providing "composable" functionality.</p>
+	</div>
+	<div class="col-lg-12">
+		<h4>A Note on Documentation</h4>
+		<p>In the API viewer, the NodeList object is displayed with all the extensions to it that are declared in all the extension modules from both Dojo and DojoX. Although the source module is identified, it is rather "complex". In addition the individual modules which extend the object are essentially "blank". In the reference guide though, each module has its own page (e.g. the dojo/NodeList-data page) which makes it clearer what methods are provided by that module.</p>
+	</div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+    	<h4>Animating Elements</h4>
+    	<button type="button" id="btn2">Pick out fresh fruits</button>
+    	<h5>Fruits 2</h5>
+		<ul style="position:relative">
+		    <li class="fresh2">Apples</li>
+		    <li class="fresh2">Persimmons</li>
+		    <li class="fresh2">Grapes</li>
+		    <li class="fresh2">Fresh Figs</li>
+		    <li class="dried">Dates</li>
+		    <li class="dried">Raisins</li>
+		    <li class="dried">Prunes</li>
+		    <li class="fresh2 dried">Apricots</li>
+		    <li class="fresh2">Peaches</li>
+		    <li class="fresh2">Bananas</li>
+		    <li class="fresh2">Cherries</li>
+		</ul>
+    </div>
+</div>
+<script type="text/javascript">
+require(["dojo/query", "dojo/NodeList-fx", "dojo/domReady!"], function(query){
+    query("#btn2").on("click", function(){
+        query("li.fresh2")
+        	.style({position:'relative', width: '200px'})
+            .slideTo({
+                left: 200, auto: true
+            })
+            .animateProperty({
+                properties: {
+                    backgroundColor: { start: "#fff", end: "#ffc" }
+                }
+            })
+            .play();
+    });
+});
+</script>
